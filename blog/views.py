@@ -9,7 +9,7 @@ def get_related_posts_count(tag):
 def serialize_post(post):
     return {
         "title": post.title,
-        "text": post.text[:200],
+        "teaser_text": post.text[:200],
         "author": post.author.username,
         "comments_amount": len(Comment.objects.filter(post=post)),
         "image_url": post.image.url if post.image else None,

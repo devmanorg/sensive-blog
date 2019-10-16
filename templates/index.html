@@ -113,7 +113,7 @@
                   {% if post.tags %}
                     <p class="tag-list-inline">Tags: {% for tag in post.tags %}<a href="{% url 'tag_filter' tag.title %}">#{{tag.title}}</a>&nbsp;{% endfor %}</p>
                   {% endif %}
-                  <p>{{post.text}}...</p>
+                  <p>{{post.teaser_text}}...</p>
                   <a class="button" href="{% url 'post_detail' post.slug %}">Read More <i class="ti-arrow-right"></i></a>
                 </div>
               </div>

@@ -2,14 +2,29 @@
 
 Блог о коммерческом успехе Юрия Григорьевича. Делюсь советами по бизнесу, жизни и о воспитании детей.
 
-<img src="screenshots/site.png"/>
+![Скриншот](screenshots/site.png)
 
 ## Запуск
 
-- Скачайте код
-- Установите зависимости командой `pip install -r requirements.txt`
-- Создайте БД командой `python3 manage.py migrate`
-- Запустите сервер командой `python3 manage.py runserver`
+Для запуска сайта вам понадобится Python третьей версии.
+
+Скачайте код с GitHub. Установите зависимости:
+
+```sh
+pip install -r requirements.txt
+```
+
+Создайте базу данных SQLite
+
+```sh
+python3 manage.py migrate
+```
+
+Запустите разработческий сервер
+
+```
+python3 manage.py runserver
+```
 
 ## Переменные окружения
 

@@ -305,3 +305,4 @@ modules.xml
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django,pycharm+all,vscode
+.DS_Store

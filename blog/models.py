@@ -13,7 +13,6 @@ class PostQuerySet(models.QuerySet):
 
     def fetch_with_comments_count(self):
         most_popular_posts_ids = [post.id for post in self]
-        pass
         post_with_comments = Post.objects.filter(id__in=most_popular_posts_ids).annotate(Count('comments'))
         ids_and_comments = post_with_comments.values_list('id', 'comments__count')
         count_for_id = dict(ids_and_comments)
@@ -41,7 +40,7 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post_detail', args={'slug': self.slug})
-   
+ 
     def get_likes_count(self):
         return self.likes.all().count()
 

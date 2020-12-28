@@ -33,7 +33,9 @@ python3 manage.py runserver
 Доступны 3 переменные:
 - `DEBUG` — дебаг-режим. Поставьте `True`, чтобы увидеть отладочную информацию в случае ошибки.
 - `SECRET_KEY` — секретный ключ проекта
-- `DATABASE_NAME` — путь до базы данных, например: `schoolbase.sqlite3`
+- `DATABASE_FILEPATH` — полный путь к файлу базы данных SQLite, например: `/home/user/schoolbase.sqlite3`
+- `ALLOWED_HOSTS` — см [документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#allowed-hosts)
+
 
 ## Цели проекта
 

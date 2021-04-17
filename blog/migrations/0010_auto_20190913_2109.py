@@ -12,7 +12,11 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='comment',
-            options={'ordering': ['published_at'], 'verbose_name': 'комментарий', 'verbose_name_plural': 'комментарии'},
+            options={
+                'ordering': ['published_at'],
+                'verbose_name': 'комментарий',
+                'verbose_name_plural': 'комментарии'
+            },
         ),
         migrations.DeleteModel(
             name='Avatar',

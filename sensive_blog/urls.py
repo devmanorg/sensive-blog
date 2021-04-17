@@ -1,6 +1,6 @@
 from django.contrib import admin
 from blog import views
-from django.urls import include, path
+from django.urls import path
 
 from django.conf.urls.static import static
 from django.conf import settings

@@ -16,22 +16,32 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Tag',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(
+                    auto_created=True, primary_key=True, serialize=False,
+                    verbose_name='ID')),
                 ('title', models.CharField(max_length=20, verbose_name='Тег')),
             ],
         ),
         migrations.CreateModel(
             name='Comment',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(
+                    auto_created=True, primary_key=True, serialize=False,
+                    verbose_name='ID')),
                 ('text', models.TextField(verbose_name='Текст комментария')),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Автор')),
-                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='blog.Post', verbose_name='Пост, к которому написан')),
+                ('author', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to=settings.AUTH_USER_MODEL, verbose_name='Автор')),
+                ('post', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='blog.Post', verbose_name='Пост, к которому написан')),
             ],
         ),
         migrations.AddField(
             model_name='post',
             name='tags',
-            field=models.ManyToManyField(related_name='posts', to='blog.Tag', verbose_name='Теги поста'),
+            field=models.ManyToManyField(
+                related_name='posts', to='blog.Tag',
+                verbose_name='Теги поста'),
         ),
     ]

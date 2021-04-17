@@ -17,11 +17,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Post',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200, verbose_name='Заголовок поста')),
+                ('id', models.AutoField(
+                    auto_created=True, primary_key=True, serialize=False,
+                    verbose_name='ID')),
+                ('title', models.CharField(
+                    max_length=200, verbose_name='Заголовок поста')),
                 ('text', models.TextField(verbose_name='Текст поста')),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Автор')),
-                ('likes', models.ManyToManyField(related_name='posts_liked', to=settings.AUTH_USER_MODEL, verbose_name='Лайки на постах')),
+                ('author', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to=settings.AUTH_USER_MODEL, verbose_name='Автор')),
+                ('likes', models.ManyToManyField(
+                    related_name='posts_liked', to=settings.AUTH_USER_MODEL,
+                    verbose_name='Лайки на постах')),
             ],
         ),
     ]

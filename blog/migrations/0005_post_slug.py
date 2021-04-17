@@ -13,7 +13,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='post',
             name='slug',
-            field=models.CharField(default='', max_length=200, verbose_name='Название поста в виде url'),
+            field=models.CharField(
+                default='', max_length=200,
+                verbose_name='Название поста в виде url'),
             preserve_default=False,
         ),
     ]

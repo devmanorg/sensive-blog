@@ -13,7 +13,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='tag',
             name='image',
-            field=models.ImageField(default='', upload_to='', verbose_name='Картинка для страницы этого тега'),
+            field=models.ImageField(
+                default='', upload_to='',
+                verbose_name='Картинка для страницы этого тега'),
             preserve_default=False,
         ),
     ]

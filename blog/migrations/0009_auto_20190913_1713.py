@@ -14,15 +14,27 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='comment',
-            options={'ordering': ['-published_at'], 'verbose_name': 'комментарий', 'verbose_name_plural': 'комментарии'},
+            options={
+                'ordering': ['-published_at'],
+                'verbose_name': 'комментарий',
+                'verbose_name_plural': 'комментарии'
+            },
         ),
         migrations.AlterModelOptions(
             name='post',
-            options={'ordering': ['-published_at'], 'verbose_name': 'пост', 'verbose_name_plural': 'посты'},
+            options={
+                'ordering': ['-published_at'],
+                'verbose_name': 'пост',
+                'verbose_name_plural': 'посты'
+            },
         ),
         migrations.AlterModelOptions(
             name='tag',
-            options={'ordering': ['title'], 'verbose_name': 'тег', 'verbose_name_plural': 'теги'},
+            options={
+                'ordering': ['title'],
+                'verbose_name': 'тег',
+                'verbose_name_plural': 'теги'
+            },
         ),
         migrations.AlterField(
             model_name='comment',
@@ -32,7 +44,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='post',
             name='author',
-            field=models.ForeignKey(limit_choices_to={'is_staff': True}, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Автор'),
+            field=models.ForeignKey(
+                limit_choices_to={'is_staff': True},
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL, verbose_name='Автор'),
         ),
         migrations.AlterField(
             model_name='post',
@@ -42,7 +57,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='post',
             name='likes',
-            field=models.ManyToManyField(blank=True, related_name='liked_posts', to=settings.AUTH_USER_MODEL, verbose_name='Кто лайкнул'),
+            field=models.ManyToManyField(
+                blank=True, related_name='liked_posts',
+                to=settings.AUTH_USER_MODEL, verbose_name='Кто лайкнул'),
         ),
         migrations.AlterField(
             model_name='post',
@@ -52,12 +69,14 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='post',
             name='slug',
-            field=models.SlugField(max_length=200, verbose_name='Название в виде url'),
+            field=models.SlugField(
+                max_length=200, verbose_name='Название в виде url'),
         ),
         migrations.AlterField(
             model_name='post',
             name='tags',
-            field=models.ManyToManyField(related_name='posts', to='blog.Tag', verbose_name='Теги'),
+            field=models.ManyToManyField(
+                related_name='posts', to='blog.Tag', verbose_name='Теги'),
         ),
         migrations.AlterField(
             model_name='post',
@@ -72,6 +91,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='tag',
             name='title',
-            field=models.CharField(max_length=20, unique=True, verbose_name='Тег'),
+            field=models.CharField(
+                max_length=20, unique=True, verbose_name='Тег'),
         ),
     ]

@@ -43,5 +43,5 @@ python3 manage.py runserver
 
 В частности, репозиторий используется:
 
-- В задаче "Оптимизируем сайт" модуля [Знакомство с Django: ORM](https://dvmn.org/modules/django-orm/).
+- В уроке "Оптимизируем сайт" курса [Знакомство с Django: ORM](https://dvmn.org/modules/django-orm/).
 - В туториале [Превью для ImageField в админке](https://devman.org/encyclopedia/django/how-to-setup-image-preview/)

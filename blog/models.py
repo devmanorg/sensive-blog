@@ -1,14 +1,10 @@
 from django.db import models
-from django.db.models import Count
+from django.db.models import Count, Prefetch
 from django.urls import reverse
 from django.contrib.auth.models import User
 
 
 class PostQuerySet(models.QuerySet):
-    def year(self, year):
-        posts_at_year = self.filter(published_at__year=year).order_by('published_at')
-        return posts_at_year
-    
     def popular(self):
         popular_posts = Post.objects.annotate(likes_count=Count('likes')).order_by('-likes_count')
         return popular_posts
@@ -35,13 +31,7 @@ class TagQuerySet(models.QuerySet):
         return popular_tags
     
     def fetch_with_post_count(self):
-        tags_ids = [tag.id for tag in self]
-        tags_with_posts = Tag.objects.filter(id__in=tags_ids).annotate(posts_count=Count('posts'))
-        ids_and_posts = tags_with_posts.values_list('id', 'posts_count')
-        count_for_id = dict(ids_and_posts)
-        for tag in self:
-            tag.posts_count = count_for_id[tag.id]
-        return self
+        return self.annotate(posts_count=Count('posts'))
 
 class Post(models.Model):
     title = models.CharField('Заголовок', max_length=200)

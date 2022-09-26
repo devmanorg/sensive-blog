@@ -15,7 +15,8 @@ class PostQuerySet(models.QuerySet):
     
     def fetch_with_comments_count(self):
         """
-        Два annotate порождают неимоверное количество записей для каждого поста: количество лайков умножается на количество постов
+        Два annotate порождают неимоверное количество записей для каждого поста: количество лайков умножается на количество постов.
+        Поэтому лучше использовать данную функцию вместо двух annotate.
         """
         most_popular_posts_ids = [post.id for post in self]
         posts_with_comments = Post.objects.filter(id__in=most_popular_posts_ids).annotate(comments_count=Count('comments'))
@@ -32,6 +33,15 @@ class TagQuerySet(models.QuerySet):
     def popular(self):
         popular_tags = self.annotate(posts_count=Count('posts')).order_by('-posts_count')
         return popular_tags
+    
+    def fetch_with_post_count(self):
+        tags_ids = [tag.id for tag in self]
+        tags_with_posts = Tag.objects.filter(id__in=tags_ids).annotate(posts_count=Count('posts'))
+        ids_and_posts = tags_with_posts.values_list('id', 'posts_count')
+        count_for_id = dict(ids_and_posts)
+        for tag in self:
+            tag.posts_count = count_for_id[tag.id]
+        return self
 
 class Post(models.Model):
     title = models.CharField('Заголовок', max_length=200)

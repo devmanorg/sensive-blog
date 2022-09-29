@@ -3,6 +3,24 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 
+class PostQuerySet(models.QuerySet):
+
+    def year(self, year):
+        posts_at_year = self.filter(published_at__year=year).order_by('published_at')
+        return posts_at_year
+
+    # def popular(self):
+    #     popular_posts = Post.objects.prefetch_related('author').annotate(num_likes=models.Count('likes')).order_by('-num_likes')
+    #     return popular_posts
+
+
+class TagQuerySet(models.QuerySet):
+
+    def popular(self):
+        popular_tags = Tag.objects.annotate(num_posts=models.Count('posts')).order_by('-num_posts')
+        return popular_tags
+
+
 class Post(models.Model):
     title = models.CharField('Заголовок', max_length=200)
     text = models.TextField('Текст')
@@ -24,6 +42,8 @@ class Post(models.Model):
         'Tag',
         related_name='posts',
         verbose_name='Теги')
+    objects = PostQuerySet.as_manager()
+
 
     def __str__(self):
         return self.title
@@ -48,6 +68,8 @@ class Tag(models.Model):
 
     def get_absolute_url(self):
         return reverse('tag_filter', args={'tag_title': self.slug})
+
+    objects = TagQuerySet.as_manager()
 
     class Meta:
         ordering = ['title']

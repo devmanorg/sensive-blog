@@ -6,32 +6,42 @@ from django.contrib.auth.models import User
 
 class PostQuerySet(models.QuerySet):
     def popular(self):
-        popular_posts = Post.objects.annotate(likes_count=Count('likes')).order_by('-likes_count')
+        popular_posts = Post.objects.annotate(likes_count=Count('likes')) \
+            .order_by('-likes_count')
         return popular_posts
-    
+
     def fetch_with_comments_count(self):
         """
-        Два annotate порождают неимоверное количество записей для каждого поста: количество лайков умножается на количество постов.
+        Два annotate порождают неимоверное количество записей
+        для каждого поста: количество лайков умножается на количество постов.
         Поэтому лучше использовать данную функцию вместо двух annotate.
         """
         most_popular_posts_ids = [post.id for post in self]
-        posts_with_comments = Post.objects.filter(id__in=most_popular_posts_ids).annotate(comments_count=Count('comments'))
-        ids_and_comments = posts_with_comments.values_list('id', 'comments_count')
+        posts_with_comments = Post.objects.filter(
+            id__in=most_popular_posts_ids
+            ) \
+            .annotate(comments_count=Count('comments'))
+
+        ids_and_comments = posts_with_comments \
+            .values_list('id', 'comments_count')
+
         count_for_id = dict(ids_and_comments)
-        
+
         for post in self:
             post.comments_count = count_for_id[post.id]
-        
+
         return self
 
 
 class TagQuerySet(models.QuerySet):
     def popular(self):
-        popular_tags = self.annotate(posts_count=Count('posts')).order_by('-posts_count')
+        popular_tags = self.annotate(posts_count=Count('posts')) \
+            .order_by('-posts_count')
         return popular_tags
-    
+
     def fetch_with_post_count(self):
         return self.annotate(posts_count=Count('posts'))
+
 
 class Post(models.Model):
     title = models.CharField('Заголовок', max_length=200)

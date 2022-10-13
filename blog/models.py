@@ -5,19 +5,23 @@ from django.contrib.auth.models import User
 
 class PostQuerySet(models.QuerySet):
 
-    def year(self, year):
-        posts_at_year = self.filter(published_at__year=year).order_by('published_at')
+    def year(posts_query, year):
+        posts_at_year = posts_query.filter(published_at__year=year).order_by('published_at')
         return posts_at_year
 
-    # def popular(self):
-    #     popular_posts = Post.objects.prefetch_related('author').annotate(num_likes=models.Count('likes')).order_by('-num_likes')
-    #     return popular_posts
+    def popular(posts_query):
+        popular_posts = posts_query.annotate(num_likes=models.Count('likes')).order_by('-num_likes')
+        return popular_posts
 
-
+    def fetch_with_comments_count(self):
+        popular_posts = self.annotate(num_likes=models.Count('likes')).order_by('-num_likes')
+        # posts_with_comments = pass
+        return posts_with_comments
+        
 class TagQuerySet(models.QuerySet):
 
-    def popular(self):
-        popular_tags = Tag.objects.annotate(num_posts=models.Count('posts')).order_by('-num_posts')
+    def popular(tags_query):
+        popular_tags = tags_query.annotate(num_posts=models.Count('posts')).order_by('-num_posts')
         return popular_tags
 
 

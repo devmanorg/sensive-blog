@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 
 class PostQuerySet(models.QuerySet):
@@ -13,11 +14,18 @@ class PostQuerySet(models.QuerySet):
         popular_posts = posts_query.annotate(num_likes=models.Count('likes')).order_by('-num_likes')
         return popular_posts
 
-    def fetch_with_comments_count(self):
-        popular_posts = self.annotate(num_likes=models.Count('likes')).order_by('-num_likes')
-        # posts_with_comments = pass
-        return posts_with_comments
+    def fetch_with_comments_count(posts_query):
+        posts_ids = [post.id for post in posts_query]
         
+        posts_with_comments = Post.objects.filter(id__in=posts_ids).annotate(comments_count=Count('comments'))
+        ids_and_comments = posts_with_comments.values_list('id', 'comments_count')
+        count_for_id = dict(ids_and_comments)
+
+        for post in posts_query:
+            post.comments_count = count_for_id[post.id]
+        return posts_query
+
+
 class TagQuerySet(models.QuerySet):
 
     def popular(tags_query):

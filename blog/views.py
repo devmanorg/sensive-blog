@@ -33,7 +33,6 @@ def serialize_tag(tag):
 
 
 def index(request):
-    users = User.objects.all()
     posts = Post.objects.all()
     most_popular_posts = sorted(posts, key = get_likes_count)[-5:]  # TODO. Как это посчитать?
         

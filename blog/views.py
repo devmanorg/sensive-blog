@@ -31,14 +31,15 @@ def serialize_post(post):
         'image_url': post.image.url if post.image else None,
         'published_at': post.published_at,
         'slug': post.slug,
-        'tags': [serialize_tag(tag) for tag in post.tags.all()],
+        'tags': [serialize_tag(tag) for tag in post.tags.annotate(posts_count=Count('posts')).all()],
         'first_tag_title': post.tags.all()[0].title,
     }
 
 def serialize_tag(tag):
     return {
         'title': tag.title,
-        'posts_with_tag': len(Post.objects.filter(tags=tag)),
+        # 'posts_with_tag': len(Post.objects.filter(tags=tag)),
+        'posts_with_tag': tag.posts_count # len(Post.objects.filter(tags=tag)),
     }
 
 
@@ -71,7 +72,7 @@ def index(request):
     most_fresh_posts = list(fresh_posts)[-5:]
 
     # most_popular_tags = Tag.objects.annotate(related_posts=Count('posts')).order_by('-related_posts')[:5]
-    most_popular_tags = Tag.objects.popular()[:5]
+    most_popular_tags = Tag.objects.annotate(posts_count=Count('posts')).popular()[:5]
 
     # tags = Tag.objects.all()
     # popular_tags = sorted(tags, key=get_related_posts_count)
@@ -88,7 +89,7 @@ def index(request):
 
 
 def post_detail(request, slug):
-    post = Post.objects.get(slug=slug)
+    post = Post.objects.get(slug=slug).annotate(posts_count=Count('posts'))
     comments = Comment.objects.filter(post=post)
     serialized_comments = []
     for comment in comments:

@@ -11,6 +11,7 @@ class TagQuerySet(models.QuerySet):
         return tags_popular
 
 
+
 class PostQuerySet(models.QuerySet):
 
     def year(self, year):

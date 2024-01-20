@@ -7,34 +7,50 @@ from django.contrib.auth.models import User
 class TagQuerySet(models.QuerySet):
 
     def popular(self):
-        tags_popular = self.annotate(related_posts=Count('posts')).order_by('-related_posts')
+        tags_popular = self.annotate(
+            related_posts=Count('posts')).order_by('-related_posts')
         return tags_popular
+
 
 class PostQuerySet(models.QuerySet):
 
     def year(self, year):
-        posts_at_year = self.filter(published_at__year=year).order_by('published_at')
+        posts_at_year = self.filter(
+            published_at__year=year
+        ).order_by('published_at')
         return posts_at_year
 
     def popular(self):
-        posts_popular = self.annotate(likes_count=Count('likes', distinct=True)).order_by('-likes_count').prefetch_related('author')[:5]
+        posts_popular = self.annotate(
+            likes_count=Count(
+                'likes',
+                distinct=True
+            )).order_by('-likes_count').prefetch_related('author')[:5]
         return posts_popular
 
     def fetch_with_comments_count(self):
-        most_popular_posts = self.annotate(likes_count=Count('likes', distinct=True)).order_by(
-            '-likes_count').prefetch_related('author')[:5]
+        most_popular_posts = self.annotate(
+            likes_count=Count('likes', distinct=True)).order_by(
+            '-likes_count'
+        ).prefetch_related('author')[:5]
 
         most_popular_posts_ids = [post.id for post in most_popular_posts]
 
-        posts_with_comments = Post.objects.filter(id__in=most_popular_posts_ids).annotate(
+        posts_with_comments = Post.objects.filter(
+            id__in=most_popular_posts_ids
+        ).annotate(
             comments_count=Count('comments'))
-        ids_and_comments = posts_with_comments.values_list('id', 'comments_count')
+        ids_and_comments = posts_with_comments.values_list(
+            'id',
+            'comments_count'
+        )
         count_for_id = dict(ids_and_comments)
 
         for post in most_popular_posts:
             post.comments_count = count_for_id[post.id]
 
         return most_popular_posts
+
 
 class Post(models.Model):
     title = models.CharField('Заголовок', max_length=200)

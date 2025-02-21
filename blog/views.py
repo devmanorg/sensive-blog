@@ -7,10 +7,6 @@ def get_related_posts_count(tag):
     return tag.posts.count()
 
 
-def get_likes_count(post):
-    return post.likes.count()
-
-
 def serialize_post(post):
     return {
         'title': post.title,
@@ -30,7 +26,7 @@ def serialize_post_optimized(post):
         'title': post.title,
         'teaser_text': post.text[:200],
         'author': post.author.username,
-        'comments_amount': post.comments_count,  # тут
+        'comments_amount': post.comments_count,
         'image_url': post.image.url if post.image else None,
         'published_at': post.published_at,
         'slug': post.slug,
@@ -50,16 +46,19 @@ def index(request):
     most_popular_posts = (
         Post.objects
         .popular()
+        .prefetch_related("tags")
         .prefetch_related("author")[:5]
         .fetch_with_comments_count()
     )
 
     fresh_posts = (
         Post.objects
-        .popular()
-        .prefetch_related("author")[:5]
-        .fetch_with_comments_count()
+        .annotate(comments_count=Count('comments'))
+        .order_by('published_at')
+        .prefetch_related("tags")
+        .prefetch_related('author')
     )
+
     most_fresh_posts = list(fresh_posts)[-5:]
 
     most_popular_tags = Tag.objects.popular_tag()[:5]
@@ -75,7 +74,7 @@ def index(request):
 
 
 def post_detail(request, slug):
-    post = Post.objects.prefetch_related("author").get(slug=slug)
+    post = Post.objects.prefetch_related('author').get(slug=slug)
     comments = Comment.objects.filter(post=post)
     serialized_comments = []
     for comment in comments:
@@ -105,6 +104,7 @@ def post_detail(request, slug):
 
     most_popular_posts = (
         Post.objects.popular()
+        .prefetch_related("tags")
         .prefetch_related("author")[:5]
         .fetch_with_comments_count()
     )
@@ -126,6 +126,7 @@ def tag_filter(request, tag_title):
 
     most_popular_posts = (
         Post.objects.popular()
+        .prefetch_related("tags")
         .prefetch_related("author")[:5]
         .fetch_with_comments_count()
     )
@@ -145,5 +146,6 @@ def tag_filter(request, tag_title):
 
 def contacts(request):
     # позже здесь будет код для статистики заходов на эту страницу
+    # и для записи фидбека    return render(request, 'contacts.html', {})
     # и для записи фидбека
     return render(request, 'contacts.html', {})

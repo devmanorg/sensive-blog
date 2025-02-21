@@ -1,0 +1,7 @@
+# Python кешированные файлы
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS системные файлы
+.DS_Store

@@ -1,3 +1,11 @@
+# Python кешированные файлы
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS системные файлы
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -135,4 +143,6 @@ dmypy.json
 .pytype/
 
 # Cython debug symbols
-cython_debug/
+cython_debug/media/
+
+media/
